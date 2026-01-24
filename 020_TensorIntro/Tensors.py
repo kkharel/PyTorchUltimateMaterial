@@ -5,7 +5,6 @@ import numpy as np
 
 #%% create a tensor
 x = torch.tensor(5.5)
-
 # %% simple calculations
 y = x + 10
 print(y)
@@ -41,6 +40,8 @@ y = (x-3) * (x-6) * (x-4)
 y.backward()
 # show gradient of first tensor
 print(x.grad)
+
+
 # %% x -> y -> z
 x = torch.tensor(1.0, requires_grad=True)
 y = x**3
