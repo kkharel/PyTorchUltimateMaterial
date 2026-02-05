@@ -5,6 +5,8 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader 
 import seaborn as sns
+from skorch import NeuralNetRegressor
+from sklearn.model_selection import GridSearchCV
 
 #%% data import
 cars_file = 'https://gist.githubusercontent.com/noamross/e5d3e859aa0c794be10b/raw/b999fb4425b54c63cab088c0ce2c0d6ce961a563/cars.csv'
@@ -63,3 +65,23 @@ optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
 
 #%%
+net = NeuralNetRegressor(
+    module=LinearRegressionTorch,
+    max_epochs=100,
+    lr=learning_rate,
+    iterator_train__shuffle=True,
+    # module__input_size=input_dim,
+    # module__output_size=output_dim
+)
+# %%
+net.set_params(train_split=False, verbose=0)
+params = {
+    'lr': [0.02, 0.05, 0.08],
+    'max_epochs': [10, 200, 500]
+}
+
+gs = GridSearchCV(net, params, scoring='r2', cv=3, verbose=2)
+gs.fit(X,y_true)
+
+print(f"Best Score: {gs.best_score_}, Best Params: {gs.best_params_}")
+# %%
