@@ -8,4 +8,24 @@ import numpy as np
 img = Image.open('kiki.jpg')
 img
 
+# %%
+img.size
+
+
 # %% compose a series of steps
+preprocess_steps = transforms.Compose([
+    transforms.Resize((300, 300)),
+    transforms.RandomRotation(50),
+    transforms.CenterCrop(200),
+    transforms.Grayscale(),
+    transforms.RandomVerticalFlip(),
+    transforms.ToTensor(),
+    # transforms.Normalize(mean=[0.5], std=[0.5])
+])
+
+x = preprocess_steps(img)
+x
+# %% get the mean and std of the image
+x.mean(), x.std()
+
+# %%
